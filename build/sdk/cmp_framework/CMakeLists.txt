@@ -46,6 +46,8 @@ target_sources(CMP_Framework
         ${COMPRESSONATOR_ROOT_PATH}/applications/_libs/cmp_math/cpu_extensions.cpp
         
         # CMP_COMMON
+        ${COMPRESSONATOR_ROOT_PATH}/applications/_plugins/common/codec_common.h
+        ${COMPRESSONATOR_ROOT_PATH}/applications/_plugins/common/codec_common.cpp
         ${COMPRESSONATOR_ROOT_PATH}/applications/_plugins/common/atiformats.h
         ${COMPRESSONATOR_ROOT_PATH}/applications/_plugins/common/atiformats.cpp
         ${COMPRESSONATOR_ROOT_PATH}/applications/_plugins/common/pluginbase.h

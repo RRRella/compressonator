@@ -84,6 +84,8 @@ if(MSVC)
     set(CMAKE_CXX_FLAGS_RELEASE_MD "")
     set(CMAKE_CXX_FLAGS_RELEASE_MD_DLL "")
 
+    message("..........................")
+    message(${CMAKE_EXE_LINKER_FLAGS})
     # Setup required variables for custom build types
     set(CMAKE_EXE_LINKER_FLAGS_DEBUG_DLL "${CMAKE_EXE_LINKER_FLAGS}")
     set(CMAKE_MODULE_LINKER_FLAGS_DEBUG_DLL "${CMAKE_MODULE_LINKER_FLAGS}")

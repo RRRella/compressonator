@@ -1,8 +1,10 @@
 cmake_minimum_required(VERSION 3.10)
 
-add_library(CMP_Core STATIC)
+project(CMP_Core LANGUAGES CXX)
 
-target_sources(CMP_Core
+add_library(${PROJECT_NAME} STATIC)
+
+target_sources(${PROJECT_NAME}
     PRIVATE
     shaders/bc1_encode_kernel.h
     shaders/bc1_common_kernel.h
@@ -35,7 +37,7 @@ target_sources(CMP_Core
 
 if (OPTION_CMP_GTC)
     target_sources(
-        CMP_Core
+        ${PROJECT_NAME}
         PRIVATE
         shaders/gtc_encode_kernel.h
         shaders/gtc_encode_kernel.cpp
@@ -44,14 +46,14 @@ endif()
 
 if (OPTION_BUILD_BROTLIG)
     target_sources(
-        CMP_Core
+        ${PROJECT_NAME}
         PRIVATE
         shaders/brlg_encode_kernel.h
         shaders/brlg_encode_kernel.cpp
     )
 endif()
 
-target_include_directories(CMP_Core
+target_include_directories(${PROJECT_NAME}
     PUBLIC
     shaders
     source
@@ -59,10 +61,8 @@ target_include_directories(CMP_Core
 )
 
 if (UNIX)
-    target_compile_definitions(CMP_Core PRIVATE _LINUX ASPM_GPU)
+    target_compile_definitions(${PROJECT_NAME} PRIVATE _LINUX ASPM_GPU)
 endif()
-
-set_target_properties(CMP_Core PROPERTIES FOLDER ${PROJECT_FOLDER_SDK_LIBS})
 
 # Core SIMD options
 
@@ -75,8 +75,6 @@ if (UNIX)
     target_compile_options(CMP_Core_SSE PRIVATE -march=nehalem)
 endif()
 
-set_target_properties(CMP_Core_SSE PROPERTIES FOLDER ${PROJECT_FOLDER_SDK_LIBS})
-
 # AVX
 add_library(CMP_Core_AVX STATIC)
 target_sources(CMP_Core_AVX PRIVATE source/core_simd_avx.cpp)
@@ -87,8 +85,6 @@ if (WIN32)
 else()
     target_compile_options(CMP_Core_AVX PRIVATE -march=haswell)
 endif()
-
-set_target_properties(CMP_Core_AVX PROPERTIES FOLDER ${PROJECT_FOLDER_SDK_LIBS})
 
 # AVX-512
 add_library(CMP_Core_AVX512 STATIC)
@@ -101,7 +97,5 @@ else()
     target_compile_options(CMP_Core_AVX512 PRIVATE -march=knl)
 endif()
 
-set_target_properties(CMP_Core_AVX512 PROPERTIES FOLDER ${PROJECT_FOLDER_SDK_LIBS})
-
 # Link SIMD libraries to CMP_Core
-target_link_libraries(CMP_Core PRIVATE CMP_Core_SSE CMP_Core_AVX CMP_Core_AVX512)
+target_link_libraries(${PROJECT_NAME} PRIVATE CMP_Core_SSE CMP_Core_AVX CMP_Core_AVX512)

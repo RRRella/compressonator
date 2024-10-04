@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+project(compressonator)
+
 # Cmake build examples: for Visual Studio 2017
 #
 # cmake -G "Visual Studio 15 2017 Win64"   Enable building all apps and libs

@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 
+project(CMP_Compressonator LANGUAGES CXX)
+
 file(GLOB_RECURSE CMP_SRCS
     # Lossy Compression
     "apc/*.h"
@@ -35,18 +37,18 @@ file(GLOB_RECURSE CMP_SRCS
     # Common 
     "common/*.h"
     "common/*.cpp"
-    ${PROJECT_SOURCE_DIR}/cmp_framework/common/*.h
-    ${PROJECT_SOURCE_DIR}/cmp_framework/common/*.cpp
-    ${PROJECT_SOURCE_DIR}/cmp_framework/common/half/*.h
-    ${PROJECT_SOURCE_DIR}/cmp_framework/common/half/*.cpp
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common/atiformats.cpp
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common/atiformats.h
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common/format_conversion.h
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common/format_conversion.cpp
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common/codec_common.h
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common/codec_common.cpp
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common/texture_utils.h
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common/texture_utils.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cmp_framework/common/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cmp_framework/common/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cmp_framework/common/half/*.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cmp_framework/common/half/*.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common/atiformats.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common/atiformats.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common/format_conversion.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common/format_conversion.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common/codec_common.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common/codec_common.cpp
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common/texture_utils.h
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common/texture_utils.cpp
 )
 
 if (OPTION_BUILD_ASTC)
@@ -67,7 +69,7 @@ if (OPTION_BUILD_BROTLIG)
     list(APPEND CMP_SRCS ${CMP_BRLG_SRCS})
 endif()
 
-add_library(CMP_Compressonator 
+add_library(${PROJECT_NAME} 
     STATIC  
     version.h
     common.h
@@ -77,7 +79,7 @@ add_library(CMP_Compressonator
     ${CMP_SRCS}
 )
 
-target_include_directories(CMP_Compressonator
+target_include_directories(${PROJECT_NAME}
     PUBLIC
     ./
     # Lossy Compression
@@ -97,16 +99,16 @@ target_include_directories(CMP_Compressonator
 
     # Common
     common
-    ${PROJECT_SOURCE_DIR}/cmp_framework/common
-    ${PROJECT_SOURCE_DIR}/cmp_framework/common/half
-    ${PROJECT_SOURCE_DIR}/applications/_plugins/common
-    ${PROJECT_SOURCE_DIR}/applications/_libs/cmp_math/
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cmp_framework/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/../cmp_framework/common/half
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_plugins/common
+    ${CMAKE_CURRENT_SOURCE_DIR}/../applications/_libs/cmp_math/
 )
 
-set_target_properties(CMP_Compressonator PROPERTIES FOLDER ${PROJECT_FOLDER_SDK_LIBS})
+#set_target_properties(${PROJECT_NAME} PROPERTIES FOLDER ${PROJECT_FOLDER_SDK_LIBS})
 
 if (OPTION_BUILD_ASTC)
-    target_include_directories(CMP_Compressonator
+    target_include_directories(${PROJECT_NAME}
         PUBLIC
         astc
         astc/arm/
@@ -114,10 +116,10 @@ if (OPTION_BUILD_ASTC)
 endif()
 
 if (OPTION_BUILD_BROTLIG)
-    target_include_directories(CMP_Compressonator PUBLIC ${PROJECT_SOURCE_DIR}/cmp_compressonatorlib/brotlig)
+    target_include_directories(${PROJECT_NAME} PUBLIC ${PROJECT_SOURCE_DIR}/cmp_compressonatorlib/brotlig)
 
     # should there be an error if OPTION_CMP_DIRECTX isn't ON?
-    target_link_libraries(CMP_Compressonator PUBLIC
+    target_link_libraries(${PROJECT_NAME} PUBLIC
         ExtBrotlig
         dxcompiler.lib
         dxgi.lib
@@ -128,4 +130,4 @@ endif()
 
 # TODO: More libraries should be linked like this when building so that we don't have to constantly repeat source file includes
 # Not just for CMP_Compressonator, do the same for the Framework and all other libraries
-target_link_libraries(CMP_Compressonator PUBLIC CMP_Core)
+target_link_libraries(${PROJECT_NAME} PUBLIC CMP_Core)
